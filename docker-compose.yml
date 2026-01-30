@@ -1,0 +1,71 @@
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    restart: unless-stopped
+    environment:
+        - ACCEPT_EULA=Y
+        - SA_PASSWORD=${SA_PASSWORD}
+        - MSSQL_PID=${MSSQL_PID}
+    ports:
+        - 1401:1433
+    expose:
+        - 1433
+    networks:
+        - tamplate-net
+
+  tamplate:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 5068:5068
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ASPNETCORE_URLS=${ASPNETCORE_URLS}
+      - APP_BASE_URL=${APP_BASE_URL} 
+      - ConnectionStrings__DefaultConnection=${DEFAULT_CONNECTION}
+      - RabbitMQ__ConnectionString=${RABBITMQ_CONNECTIONSTRING}
+      - JWT__Secret=${JWT_SECRET}
+      - JWT__ValidIssuer=${JWT_ISSUER}
+      - JWT__ValidAudience=${JWT_AUDIENCE}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - STRIPE_PUBLISHABLE_KEY=${STRIPE_PUBLISHABLE_KEY}
+    depends_on:
+      - sqlserver
+      - rabbitmq 
+    networks:
+      - tamplate-net
+
+  tamplate-subscriber:
+    build:
+      context: .
+      dockerfile: Dockerfile-Subscriber
+    environment:
+      - RABBITMQ_CONNECTIONSTRING=${RABBITMQ_CONNECTIONSTRING}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_USERNAME=${SMTP_USERNAME}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+    depends_on:
+      - rabbitmq
+    networks:
+      - tamplate-net
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    restart: unless-stopped
+    ports:
+      - 15672:15672
+      - 5672:5672
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+    networks:
+      - tamplate-net
+      
+
+networks:
+  tamplate-net:
+    driver: bridge
