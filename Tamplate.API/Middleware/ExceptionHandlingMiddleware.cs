@@ -61,7 +61,9 @@ namespace Tamplate.API.Middleware
             var result = JsonSerializer.Serialize(new
             {
                 error = message,
-                statusCode = statusCode
+                statusCode = statusCode,
+                //Remove stack trace in production
+                stackTrace = exception.StackTrace
             });
 
             return context.Response.WriteAsync(result);

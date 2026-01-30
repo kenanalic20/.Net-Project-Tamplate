@@ -31,9 +31,9 @@ echo ""
 
 # Run Docker Compose
 echo "[3/3] Starting Docker containers..."
-echo "Running: docker-compose up --build -d"
+echo "Running: docker compose up --build -d"
 
-if ! docker-compose up --build -d; then
+if ! docker compose up --build -d; then
     echo "ERROR: Failed to start Docker containers"
     exit 1
 fi
@@ -43,5 +43,5 @@ echo ""
 echo "=== Setup Complete! ==="
 echo ""
 echo "Application is now running!"
-echo "You can check the status with: docker-compose ps"
+echo "You can check the status with: docker compose ps"
 echo ""

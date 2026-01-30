@@ -24,7 +24,10 @@ namespace Tamplate.Infrastructure.Extensions
 
             services.AddTransient<IEmailService, EmailService>();
             services.AddScoped<IPaymentService, StripePaymentService>();
-
+            //Registering example service
+            services.AddScoped<IExampleService,ExampleService>();
+            //Registering example repository
+            services.AddScoped<IExampleRepository,ExampleRepository>();
 
 
             return services;
