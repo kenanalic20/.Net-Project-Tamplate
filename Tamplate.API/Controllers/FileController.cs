@@ -23,7 +23,7 @@ namespace Tamplate.API.Controllers
         [HttpPost]
         public async Task<IActionResult> UploadFile([FromForm] FileDto dto)
         {
-            var isPdf = dto.File?.FileName?.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase)??false;
+            var isPdf = dto.File?.FileName?.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase) ?? false;
             var isAdmin = await _authService.IsAdminAsync(User);
 
             if (isPdf && !isAdmin)
@@ -44,7 +44,7 @@ namespace Tamplate.API.Controllers
             return Ok(new { FileUrl = url });
         }
         [HttpDelete("delete")]
-        public async Task<IActionResult> DeleteFile([FromForm]FileDeleteDto dto)
+        public async Task<IActionResult> DeleteFile([FromForm] FileDeleteDto dto)
         {
             var isAdmin = await _authService.IsAdminAsync(User);
             var extension = Path.GetExtension(dto.FileUrl)?.ToLower();
@@ -69,7 +69,7 @@ namespace Tamplate.API.Controllers
         {
             var isAdmin = await _authService.IsAdminAsync(User);
 
-            if(dto.File==null)
+            if (dto.File == null)
                 return BadRequest("File is required for update.");
 
             var extension = Path.GetExtension(dto.File.FileName).ToLower();
@@ -89,6 +89,13 @@ namespace Tamplate.API.Controllers
                 return BadRequest("Update failed. Check file type or path.");
 
             return Ok(new { FileUrl = url });
+        }
+        
+        [HttpGet("list")]
+        public async Task<IActionResult> ListFiles([FromQuery] string? subfolder = null)
+        {
+            var files = await _fileService.GetAllFilesAsync(subfolder);
+            return Ok(new { files });
         }
     }
 }

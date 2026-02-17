@@ -16,4 +16,13 @@ namespace Tamplate.Application.DTOs
         public string FileUrl { get; set; } = string.Empty;
         public string Subfolder { get; set; } = "General";
     }
+    public class FileInfoDto
+    {
+        public string? Name { get; set; }
+        public string? Url { get; set; }
+        public long? Size { get; set; }
+        public string? Extension { get; set; }
+        public DateTime? UploadDate { get; set; } 
+        public string? Subfolder { get; set; }
+    }
 }

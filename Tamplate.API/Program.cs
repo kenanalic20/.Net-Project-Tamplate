@@ -66,6 +66,22 @@ using (var scope = app.Services.CreateScope())
 
 }
 
+// File Manager Dashboard Route
+app.MapGet("/file-manager", async context =>
+{
+    var htmlPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "file-manager", "index.html");
+    if (File.Exists(htmlPath))
+    {
+        var html = await File.ReadAllTextAsync(htmlPath);
+        context.Response.ContentType = "text/html";
+        await context.Response.WriteAsync(html);
+    }
+    else
+    {
+        context.Response.StatusCode = 404;
+        await context.Response.WriteAsync("File Manager Dashboard not found. Please create wwwroot/file-manager/index.html");
+    }
+});
 
 app.UseAuthentication();
 

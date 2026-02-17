@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Tamplate.Application.DTOs;
 using Tamplate.Application.Interfaces.Services;
 
 namespace Tamplate.Infrastructure.Services
@@ -12,7 +14,7 @@ namespace Tamplate.Infrastructure.Services
 
         public FileService(IWebHostEnvironment env, IConfiguration config)
         {
-            _webRootPath = env.WebRootPath;
+            _webRootPath = env.WebRootPath ?? Path.Combine(env.ContentRootPath, "wwwroot");
             _baseUrl = config["APP_BASE_URL"] ?? "http://localhost:5068";
         }
 
@@ -68,5 +70,39 @@ namespace Tamplate.Infrastructure.Services
 
             return false;
         }
+
+        public virtual async Task<List<FileInfoDto>> GetAllFilesAsync(string? subfolder=null)
+        {
+            var targetFolder = string.IsNullOrEmpty(subfolder)
+                ? _webRootPath
+                : Path.Combine(_webRootPath, subfolder);
+
+            if (!Directory.Exists(targetFolder))
+            {
+                return new List<FileInfoDto>();
+            }
+            var files = new List<FileInfoDto>();
+
+            await Task.Run(() =>
+            {
+                var fileEntries = Directory.GetFiles(targetFolder, "*.*", SearchOption.TopDirectoryOnly);
+                foreach (var filePath in fileEntries)
+                {
+                    var fileInfo = new FileInfo(filePath);
+                    var relativePath = Path.GetRelativePath(_webRootPath, filePath).Replace("\\", "/");
+                     files.Add(new FileInfoDto
+                    {
+                        Name = fileInfo.Name,
+                        Url = $"{_baseUrl}/{relativePath}",
+                        Size = fileInfo.Length,
+                        Extension = fileInfo.Extension,
+                        UploadDate = fileInfo.CreationTime,
+                        Subfolder = subfolder ?? ""
+                    });
+                }
+            });            
+            return files;
+        }
+
     }
 }

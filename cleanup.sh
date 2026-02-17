@@ -9,7 +9,7 @@ echo ""
 echo "[1/2] Stopping Docker containers..."
 echo "Running: docker-compose down"
 
-if ! docker-compose down; then
+if ! docker compose down; then
     echo "WARNING: Docker compose down failed or no containers were running"
 fi
 
