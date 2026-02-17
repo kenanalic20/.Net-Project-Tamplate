@@ -24,12 +24,15 @@
             <span class="navbar-brand mb-0 h1">
                 <i class="bi bi-folder2-open"></i> File Manager Dashboard
             </span>
-            <button class="btn btn-outline-light" id="refreshBtn">
-                <i class="bi bi-arrow-clockwise"></i> Refresh
+            <button type="button" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                Authorize
             </button>
+
         </div>
     </nav>
+    <div class="container text-center pt-4">
 
+    </div>
     <div class="container-fluid py-4">
         <!-- Stats Row -->
         <div class="row mb-4">
@@ -142,17 +145,47 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
 
+                    <div class="input-group flex-nowrap">
+                        <span class="input-group-text" id="addon-wrapping">@</span>
+                        <input type="text" class="form-control" placeholder="Username" aria-label="Username"
+                            aria-describedby="addon-wrapping">
+                    </div>
+
+                    <div class="input-group flex-nowrap">
+                        <span class="input-group-text" id="addon-wrapping">@</span>
+                        <input type="password" class="form-control" placeholder="Password" aria-label="Password"
+                            aria-describedby="addon-wrapping">
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Understood</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- jQuery (must load first) -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     <!-- Dropzone JS -->
     <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
-    
+
     <!-- Your Custom Script -->
     <script src="js/app.js"></script>
 </body>
+
 </html>
