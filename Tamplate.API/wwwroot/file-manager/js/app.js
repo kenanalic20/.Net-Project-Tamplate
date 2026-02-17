@@ -1,3 +1,4 @@
+import Auth from './auth.js';
 class App{
    
     constructor() {
@@ -6,12 +7,10 @@ class App{
 
     init(){
         console.log("Works");
-        this.auth();
+        // console.log(Config.API_URL);
     }
 
-    auth(){
-        
-    }
-   
+    
 }
 var app = new App();
+var auth = new Auth();
