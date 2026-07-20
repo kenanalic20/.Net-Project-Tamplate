@@ -15,6 +15,11 @@
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/styles.css">
+    <script>
+        window.fileManagerConfig = {
+            apiBaseUrl: 'http://localhost:5068'
+        };
+    </script>
 </head>
 
 <body>
@@ -24,9 +29,12 @@
             <span class="navbar-brand mb-0 h1">
                 <i class="bi bi-folder2-open"></i> File Manager Dashboard
             </span>
-            <button type="button" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                Authorize
-            </button>
+            <div class="d-flex align-items-center gap-2">
+                <span id="authStatus" class="badge text-bg-secondary">Not authorized</span>
+                <button type="button" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#authModal">
+                    <i class="bi bi-shield-lock"></i> Authorize
+                </button>
+            </div>
 
         </div>
     </nav>
@@ -145,31 +153,30 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade" id="authModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="authModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                    <h1 class="modal-title fs-5" id="authModalLabel">Authorize</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <p class="text-muted mb-3">Sign in to get a JWT and continue using the file manager.</p>
 
-                    <div class="input-group flex-nowrap">
-                        <span class="input-group-text" id="addon-wrapping">@</span>
-                        <input type="text" class="form-control" placeholder="Username" aria-label="Username"
-                            aria-describedby="addon-wrapping">
+                    <div class="mb-3">
+                        <label for="authUsername" class="form-label">Username</label>
+                        <input id="authUsername" type="text" class="form-control" placeholder="Username" aria-label="Username">
                     </div>
 
-                    <div class="input-group flex-nowrap">
-                        <span class="input-group-text" id="addon-wrapping">@</span>
-                        <input type="password" class="form-control" placeholder="Password" aria-label="Password"
-                            aria-describedby="addon-wrapping">
-                        
+                    <div class="mb-3">
+                        <label for="authPassword" class="form-label">Password</label>
+                        <input id="authPassword" type="password" class="form-control" placeholder="Password" aria-label="Password">
                     </div>
 
                 </div>
                 <div class="modal-footer">
+                    <button id="clearAuth" type="button" class="btn btn-outline-danger me-auto">Logout</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button id="auth" type="button" class="btn btn-primary">Authenticate</button>
                 </div>

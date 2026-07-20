@@ -18,6 +18,18 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerService();
+//For Development of File Manager Dashboard
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("FrontendCors", policy =>
+    {
+        policy.WithOrigins(
+                "http://localhost:5500",
+                "http://127.0.0.1:5500")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString, b => b.MigrationsAssembly("Tamplate.Domain")));
 
@@ -31,6 +43,8 @@ var app = builder.Build();
 
 app.UseStaticFiles();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
+//For Development of File Manager Dashboard
+app.UseCors("FrontendCors");
 
 if (app.Environment.IsDevelopment())
 {
